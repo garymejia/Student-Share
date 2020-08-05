@@ -1,25 +1,26 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .models import UserProfile, User, Courses
+from .models import UserProfile, Courses
+from django.http import HttpResponseRedirect
+
 # Create your views here.
 
 def indexView(request):
     return render(request, 'index.html')
 
 @login_required
-def dashboardView(request):
+def dashboard_view(request):
     #Retrieves the users profile
-    userId = request.user.id
-    studentProfile = UserProfile.objects.get(user_id=userId)
-    crsNotTaken = Courses.objects.exclude(userprofiles=studentProfile).all()
+    user_id = request.user.id
+    student_profile = UserProfile.objects.get(user_id=user_id)
+    crs_not_taken = Courses.objects.exclude(userprofiles=student_profile).all()
     #queryset with all of the users courses
-    querySet = studentProfile.course.all()
+    query_set = student_profile.course.all()
 
-    return render(request, 'dashboard.html', {'query_set':querySet,'crs_not_taken': crsNotTaken})
+    return render(request, 'dashboard.html', {'query_set':query_set, 'crs_not_taken': crs_not_taken})
 
-
-def registerView(request):
+def register_view(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -28,4 +29,3 @@ def registerView(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form':form})
-

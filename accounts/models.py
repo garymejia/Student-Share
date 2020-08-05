@@ -1,6 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
-
+from django.contrib.auth import get_user_model
 # Create your models here.
 
 class Courses(models.Model):
@@ -15,7 +14,8 @@ class Courses(models.Model):
         return self.title
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    usermodel = get_user_model()
+    user = models.OneToOneField(usermodel, on_delete=models.CASCADE)
     course = models.ManyToManyField('Courses', through='Attends')
 
     def __str__(self):

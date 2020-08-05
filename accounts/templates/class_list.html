@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+<div class="list-group">
+  {% for sr in query_set %}
+    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{ sr.title}}</h5>
+        <small class="text-muted">3 days ago</small>
+      </div>
+      <p class="mb-1">Replace with last message in server. (like a notification message from messenger)</p>
+      <small class="text-muted">-from user1231</small>
+    </a>
+  {% endfor %}
+</div>

@@ -16,19 +16,17 @@
        
 
     <div class="add_course_container" style="display: flex;flex-wrap: wrap;">    
-        <form method="POST" action="add_course">
-            {% csrf_token %}                
-            <div class="form-group" style="width: 400px;float:left;">
+            {{ form }}                
+            <!--<div class="form-group" style="width: 400px;float:left;">
                     <select multiple class="form-control" id="exampleFormControlSelect2">
                         {% for course in crs_not_taken %}
                             <option>{{ course.title}}</option>
                         {% endfor %}
                     </select>
-            </div>
+            </div>-->
 
             <div class = "row align-items-center pl-5" style="float:left">
                 <button type="submit" class="btn btn-secondary">Add Course</button>            
             </div>
-        </form>
     </div>
 {% endblock %}

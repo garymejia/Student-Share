@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile, Courses
 from django.http import HttpResponseRedirect
+from .forms import CourseForm
 
 # Create your views here.
 
@@ -15,10 +16,12 @@ def dashboard_view(request):
     user_id = request.user.id
     student_profile = UserProfile.objects.get(user_id=user_id)
     crs_not_taken = Courses.objects.exclude(userprofiles=student_profile).all()
+       
+    form = CourseForm(crs=crs_not_taken)
+    
     #queryset with all of the users courses
     query_set = student_profile.course.all()
-
-    return render(request, 'dashboard.html', {'query_set':query_set, 'crs_not_taken': crs_not_taken})
+    return render(request, 'dashboard.html', {'query_set':query_set, 'form':form})
 
 def register_view(request):
     if request.method == "POST":

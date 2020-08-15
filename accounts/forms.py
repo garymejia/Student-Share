@@ -1,9 +1,13 @@
 from django import forms
-from .models import UserProfile, Courses
+from .models import UserProfile, Course#, Attends
 
-class CourseForm(forms.Form):
-    #Override forms init method to take an extra keyword argument, request
+
+class CourseForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        exclude = ('user',)
+
     def __init__(self, *args, **kwargs):
-        self.crs = kwargs.pop('crs', None)
+        self.courses=kwargs.pop('courses', None)
         super(CourseForm, self).__init__(*args, **kwargs)
-        self.fields["crses"].queryset = forms.MultipleChoiceField(choices=self.crs)     
+        self.fields['courses'].queryset = self.courses

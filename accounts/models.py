@@ -41,7 +41,7 @@ class Course(models.Model):
 
 class UserProfile(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, default=None)
-    courses = models.ManyToManyField(Course, blank=True, null=True)
+    courses = models.ManyToManyField(Course, blank=True)
 
     def __str__(self):
         return "%s's profile" % self.user

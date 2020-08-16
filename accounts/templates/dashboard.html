@@ -16,7 +16,7 @@
        
 
     <div class="add_course_container" style="display: flex;flex-wrap: wrap;">    
-        <form method = 'post' action="{% url 'dashboard' %}"">
+        <form method = 'post' action="{% url 'dashboard' %}">
             {% csrf_token %}
             {{ form }}                
         <button type="submit" class="btn btn-secondary">Add Course</button>

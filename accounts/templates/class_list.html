@@ -2,14 +2,20 @@
 
 
 <div class="list-group">
-  {% for sr in enrolled_courses %}
+  {% for crs in enrolled_courses %}
     <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
       <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">{{ sr.title}}</h5>
+        <h5 class="mb-1">{{ crs.title}}</h5>
         <small class="text-muted">3 days ago</small>
       </div>
       <p class="mb-1">Replace with last message in server. (like a notification message from messenger)</p>
-      <small class="text-muted">-from user1231</small>
+      <div class="d-flex w-100 justify-content-between">
+        <small class="text-muted">-from user1231</small>
+        <form action="{% url 'remove' %}" method="POST">
+          {% csrf_token %}
+          <small><button style = "background:none;border:none;color: red;" name = "remove_value" value = "{{crs.title}}">Remove Course</button></small>
+        </form>
+      </div>
     </a>
   {% endfor %}
 </div>

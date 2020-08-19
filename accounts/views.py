@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required   
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from .models import UserProfile, Course#, Attends
-from .forms import CourseForm
+from .models import UserProfile, Course, Document
+from .forms import CourseForm, DocumentForm
 
 # Create your views here.
 
@@ -66,3 +66,34 @@ def remove_view(request):
 
     #Work on how to properly redirect page in remove_view 
     #also should change dashboard view to redirect instead of render to prevent double post when user is filling out form with post and refreshed page
+
+
+def course_server(request, *args, **kwargs):
+    #we want to check if the user belongs to the class
+    user = request.user.id
+    message = 'Upload as many files as you want!'
+
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            newdoc = Document(docfile=request.FILES['docfile'])
+            newdoc.save()
+            # Redirect to the document list after POST
+            return HttpResponseRedirect(request.path_info)
+        else:
+            message = 'The form is not valid. Fix the following error:'        
+    form = DocumentForm()  # An empty, unbound form
+    # Load documents for the list page
+    documents = Document.objects.all()
+
+    # Render list page with the documents and the form
+    try:
+        #check if student belongs to class
+        UserProfile.objects.filter(user_id=user)[0].courses.filter(title=kwargs['course_title'])
+        #return course info to page
+        course = Course.objects.get(title=kwargs['course_title'])
+        ##########return render(request, 'course_server.html', context)    
+        return render(request, 'course_server.html', {'course':course,'documents': documents, 'form': form, 'message': message})
+    except UserProfile.DoesNotExist:   
+        print("Error") 
+    return HttpResponseNotFound("Error")  

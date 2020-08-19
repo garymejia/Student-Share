@@ -11,3 +11,6 @@ class CourseForm(forms.ModelForm):
         self.courses=kwargs.pop('courses', None)
         super(CourseForm, self).__init__(*args, **kwargs)
         self.fields['courses'].queryset = self.courses
+
+class DocumentForm(forms.Form):
+    docfile = forms.FileField(label='Select a file')

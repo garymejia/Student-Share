@@ -3,7 +3,9 @@
 
 <div class="list-group">
   {% for crs in enrolled_courses %}
-    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+  <!--Should link to one template but pass unique course code. Must find a way to authenticate user too. Prolly authenticate in 
+  python -->
+    <a href="{% url 'course_server' crs.title%}" class="list-group-item list-group-item-action flex-column align-items-start">
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1">{{ crs.title}}</h5>
         <small class="text-muted">3 days ago</small>

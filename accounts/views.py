@@ -73,27 +73,39 @@ def course_server(request, *args, **kwargs):
     user = request.user.id
     message = 'Upload as many files as you want!'
 
+    #return course info to page
+    course_name = kwargs['course_title']
+    course = Course.objects.get(title=course_name)
+
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
             newdoc = Document(docfile=request.FILES['docfile'])
             newdoc.save()
+            course.documents.add(newdoc)
             # Redirect to the document list after POST
             return HttpResponseRedirect(request.path_info)
         else:
             message = 'The form is not valid. Fix the following error:'        
     form = DocumentForm()  # An empty, unbound form
     # Load documents for the list page
-    documents = Document.objects.all()
+    documents = course.documents.all()
 
     # Render list page with the documents and the form
     try:
         #check if student belongs to class
-        UserProfile.objects.filter(user_id=user)[0].courses.filter(title=kwargs['course_title'])
-        #return course info to page
-        course = Course.objects.get(title=kwargs['course_title'])
-        ##########return render(request, 'course_server.html', context)    
+        UserProfile.objects.filter(user_id=user)[0].courses.filter(title=course_name)
         return render(request, 'course_server.html', {'course':course,'documents': documents, 'form': form, 'message': message})
     except UserProfile.DoesNotExist:   
         print("Error") 
     return HttpResponseNotFound("Error")  
+
+
+"""def download(request, path):
+     file_path = os.path.join(settings.MEDIA_ROOT, path)
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+    raise Http404"""
